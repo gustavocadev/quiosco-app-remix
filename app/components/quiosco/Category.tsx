@@ -1,31 +1,31 @@
-import { useNavigate, useParams } from "remix"
-import { useContext } from "react"
-import { QuioscoContext } from "~/context/quiosco"
+import { useNavigate, useParams } from '@remix-run/react';
+import { useContext } from 'react';
+import { QuioscoContext } from '~/context/quiosco';
 type Props = {
-  name: string
-  icon: string
-  id: number
-}
+  name: string;
+  icon: string;
+  id: number;
+};
 
 function Category({ name, icon, id }: Props) {
-  const navigate = useNavigate()
-  const { pathname } = useParams()
-  const { categorySelected, setCategorySelected } = useContext(QuioscoContext)
+  const navigate = useNavigate();
+  const { pathname } = useParams();
+  const { categorySelected, setCategorySelected } = useContext(QuioscoContext);
 
   return (
     <button
       className={`
-       ${categorySelected?.id === id && "bg-amber-400"}
+       ${categorySelected?.id === id && 'bg-amber-400'}
        flex items-center gap-4 w-full border p-5 hover:bg-amber-400 hover:cursor-pointer`}
       onClick={() => {
-        if (pathname !== "/") {
-          navigate("/")
+        if (pathname !== '/') {
+          navigate('/');
         }
         setCategorySelected({
           id,
           name,
           icon,
-        })
+        });
         // getCategoryById(id)
       }}
     >
@@ -39,7 +39,7 @@ function Category({ name, icon, id }: Props) {
       </figure>
       <h2 className="text-2xl font-bold ">{name}</h2>
     </button>
-  )
+  );
 }
 
-export { Category }
+export { Category };

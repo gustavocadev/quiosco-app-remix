@@ -1,9 +1,9 @@
-import type { Category } from "@prisma/client"
-import { Category as CategoryComponent } from "~/components/quiosco/Category"
+import type { Category } from '@prisma/client';
+import { Category as CategoryComponent } from '~/components/quiosco/Category';
 
 type Props = {
-  categories: Category[]
-}
+  categories: Category[];
+};
 
 function Sidebar({ categories }: Props) {
   return (
@@ -17,7 +17,7 @@ function Sidebar({ categories }: Props) {
         ))}
       </nav>
     </>
-  )
+  );
 }
 
-export { Sidebar }
+export { Sidebar };

@@ -1,14 +1,14 @@
-import { Product as ProductType } from "@prisma/client"
-import { useContext } from "react"
-import { QuioscoContext } from "~/context/quiosco"
+import type { Product as ProductType } from '@prisma/client';
+import { useContext } from 'react';
+import { QuioscoContext } from '~/context/quiosco';
 
 type Props = {
-  product: ProductType
-}
+  product: ProductType;
+};
 
 const Product = ({ product }: Props) => {
-  const { name, price, image, id } = product
-  const { setProductSelected, toggleProductModal } = useContext(QuioscoContext)
+  const { name, price, image, id } = product;
+  const { setProductSelected, toggleProductModal } = useContext(QuioscoContext);
 
   return (
     <section className="p-3 border">
@@ -29,8 +29,8 @@ const Product = ({ product }: Props) => {
             className="w-full p-3 mt-3 font-bold text-white uppercase bg-indigo-600 rounded hover:bg-indigo-800"
             onClick={() => {
               // setProduct(product)
-              toggleProductModal()
-              setProductSelected(product)
+              toggleProductModal();
+              setProductSelected(product);
             }}
           >
             Agregar
@@ -38,7 +38,7 @@ const Product = ({ product }: Props) => {
         </figcaption>
       </figure>
     </section>
-  )
-}
+  );
+};
 
-export { Product }
+export { Product };

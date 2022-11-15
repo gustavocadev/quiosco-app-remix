@@ -1,30 +1,31 @@
-import { useLoaderData, LoaderFunction } from "remix"
-import type { MetaFunction } from "remix"
-import { Product } from "~/components/quiosco/Product"
-import { Product as ProductType } from "@prisma/client"
-import { useContext } from "react"
-import { QuioscoContext } from "~/context/quiosco"
-import { db } from "~/utils/db.server"
+import { useLoaderData } from '@remix-run/react';
+import type { MetaFunction } from '@remix-run/node';
+import { Product } from '~/components/quiosco/Product';
+import type { Product as ProductType } from '@prisma/client';
+import { useContext } from 'react';
+import { QuioscoContext } from '~/context/quiosco';
+import { db } from '~/utils/db.server';
+import type { LoaderArgs } from '@remix-run/node';
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Quiosco Menu",
-    description: "Quiosco Cafetería, una comida rápida y de calidad para ti",
-  }
-}
-export const loader: LoaderFunction = async () => {
-  const products = await db.product.findMany()
-  return products
-}
+    title: 'Quiosco Menu',
+    description: 'Quiosco Cafetería, una comida rápida y de calidad para ti',
+  };
+};
+export const loader = async (args: LoaderArgs) => {
+  const products: ProductType[] = await db.product.findMany();
+  return products;
+};
 
 export default function HomeLayout() {
-  const products = useLoaderData<ProductType[]>()
+  const products = useLoaderData<typeof loader>();
 
-  const { categorySelected } = useContext(QuioscoContext)
+  const { categorySelected } = useContext(QuioscoContext);
 
   const filteredProducts = products.filter(
     (p) => p.categoryId === categorySelected.id
-  )
+  );
 
   return (
     <>
@@ -40,5 +41,5 @@ export default function HomeLayout() {
         ))}
       </section>
     </>
-  )
+  );
 }

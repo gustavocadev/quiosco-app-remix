@@ -1,19 +1,19 @@
-import { useContext, useEffect, useState } from "react"
-import { QuioscoContext } from "../../context/quiosco"
-import Modal from "react-modal"
-type Props = {}
+import { useContext, useEffect, useState } from 'react';
+import { QuioscoContext } from '../../context/quiosco';
+import Modal from 'react-modal';
+type Props = {};
 
 const customStyles = {
   content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
   },
-}
-Modal.setAppElement("body")
+};
+Modal.setAppElement('body');
 
 const ModalProduct = (props: Props) => {
   const {
@@ -23,23 +23,23 @@ const ModalProduct = (props: Props) => {
     handleUpdateOrders,
     orders,
     handleEditQuantities,
-  } = useContext(QuioscoContext)
-  const [quantity, setQuantity] = useState(1)
+  } = useContext(QuioscoContext);
+  const [quantity, setQuantity] = useState(1);
 
-  const [editProduct, setEditProduct] = useState(false)
+  const [editProduct, setEditProduct] = useState(false);
 
   useEffect(() => {
     // if it exists in the orders, set quantity to the quantity in the orders
     if (orders.some((order) => order.id === productSelected?.id)) {
       const productToEdit = orders.find(
         (order) => order.id === productSelected?.id
-      )!
-      setEditProduct(true)
-      setQuantity(productToEdit.quantity)
-      return
+      )!;
+      setEditProduct(true);
+      setQuantity(productToEdit.quantity);
+      return;
     }
-    setEditProduct(false)
-  }, [orders, productSelected])
+    setEditProduct(false);
+  }, [orders, productSelected]);
 
   return (
     <Modal
@@ -82,8 +82,8 @@ const ModalProduct = (props: Props) => {
           <section className="flex gap-4 mt-5">
             <button
               onClick={() => {
-                if (quantity <= 1) return
-                setQuantity(quantity - 1)
+                if (quantity <= 1) return;
+                setQuantity(quantity - 1);
               }}
             >
               <svg
@@ -106,8 +106,8 @@ const ModalProduct = (props: Props) => {
 
             <button
               onClick={() => {
-                if (quantity >= 5) return
-                setQuantity(quantity + 1)
+                if (quantity >= 5) return;
+                setQuantity(quantity + 1);
               }}
             >
               <svg
@@ -132,9 +132,9 @@ const ModalProduct = (props: Props) => {
             className="w-full p-3 mt-3 font-bold text-white uppercase bg-indigo-600 rounded hover:bg-indigo-800"
             onClick={() => {
               if (editProduct) {
-                handleEditQuantities(productSelected?.id!, quantity)
-                toggleProductModal()
-                return
+                handleEditQuantities(productSelected?.id!, quantity);
+                toggleProductModal();
+                return;
               }
               handleUpdateOrders({
                 id: productSelected?.id!,
@@ -142,17 +142,17 @@ const ModalProduct = (props: Props) => {
                 price: productSelected?.price!,
                 image: productSelected?.image!,
                 quantity,
-              })
-              toggleProductModal()
-              setQuantity(1)
+              });
+              toggleProductModal();
+              setQuantity(1);
             }}
           >
-            {editProduct ? "Editar" : "Agregar"}
+            {editProduct ? 'Editar' : 'Agregar'}
           </button>
         </section>
       </section>
     </Modal>
-  )
-}
+  );
+};
 
-export default ModalProduct
+export default ModalProduct;

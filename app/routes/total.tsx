@@ -1,23 +1,26 @@
-import { useEffect, useContext, useCallback, useState } from "react"
-import { QuioscoContext } from "../context/quiosco/QuioscoContext"
-import { ActionFunction, Form, redirect, MetaFunction } from "remix"
-import { toast } from "react-toastify"
-import { db } from "~/utils/db.server"
+import { useEffect, useContext, useCallback, useState } from 'react';
+import { QuioscoContext } from '../context/quiosco/QuioscoContext';
+import { Form } from '@remix-run/react';
+import { redirect } from '@remix-run/node';
+import type { ActionArgs, MetaFunction } from '@remix-run/node';
+
+import { toast } from 'react-toastify';
+import { db } from '~/utils/db.server';
 
 export const meta: MetaFunction = () => {
   return {
-    title: "Total",
-    description: "Esta seccion es sobre el total del pedido",
-  }
-}
+    title: 'Total',
+    description: 'Esta seccion es sobre el total del pedido',
+  };
+};
 
-export const action: ActionFunction = async ({ request }) => {
-  const formData = await request.formData()
+export const action = async ({ request }: ActionArgs) => {
+  const formData = await request.formData();
 
-  const name = formData.get("name") as string
-  const orders = formData.get("orders") as string
-  const total = formData.get("total") as string
-  const date = Date.now().toString() as string
+  const name = formData.get('name') as string;
+  const orders = formData.get('orders') as string;
+  const total = formData.get('total') as string;
+  const date = Date.now().toString() as string;
 
   await db.order.create({
     data: {
@@ -26,22 +29,22 @@ export const action: ActionFunction = async ({ request }) => {
       total: Number(total),
       order: JSON.parse(orders),
     },
-  })
+  });
 
-  return redirect(`/`)
-}
+  return redirect(`/`);
+};
 
 export default function TotalPage() {
-  const { orders, totalPrice } = useContext(QuioscoContext)
-  const [name, setName] = useState("")
+  const { orders, totalPrice } = useContext(QuioscoContext);
+  const [name, setName] = useState('');
 
   const isValidOrder = useCallback(() => {
-    return orders.length > 0 && name.length > 2
-  }, [orders, name])
+    return orders.length > 0 && name.length > 2;
+  }, [orders, name]);
 
   useEffect(() => {
-    isValidOrder()
-  }, [orders, isValidOrder])
+    isValidOrder();
+  }, [orders, isValidOrder]);
   return (
     <>
       <h1 className="text-4xl font-black">Total y confirmar pedido</h1>
@@ -49,7 +52,7 @@ export default function TotalPage() {
       <Form
         method="post"
         onSubmit={() => {
-          toast.success("Pedido realizado con exito")
+          toast.success('Pedido realizado con exito');
         }}
       >
         <section>
@@ -80,8 +83,8 @@ export default function TotalPage() {
           <button
             className={`${
               !isValidOrder()
-                ? "bg-indigo-100"
-                : "bg-indigo-600 hover:bg-indigo-800"
+                ? 'bg-indigo-100'
+                : 'bg-indigo-600 hover:bg-indigo-800'
             } w-full lg:w-auto px-5 py-2 rounded uppercase font-bold text-gray-200 text-center`}
             type="submit"
             disabled={!isValidOrder()}
@@ -91,5 +94,5 @@ export default function TotalPage() {
         </section>
       </Form>
     </>
-  )
+  );
 }

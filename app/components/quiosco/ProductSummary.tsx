@@ -1,13 +1,13 @@
-import { useContext } from "react"
-import { QuioscoContext } from "../../context/quiosco"
+import { useContext } from 'react';
+import { QuioscoContext } from '../../context/quiosco';
 
 type Props = {
-  order: any
-}
+  order: any;
+};
 
 export const ProductSummary = ({ order }: Props) => {
   const { handleDeleteProduct, toggleProductModal, setProductSelected } =
-    useContext(QuioscoContext)
+    useContext(QuioscoContext);
   return (
     <section className="flex items-center gap-10 p-3 mb-3 border shadow">
       <figure className="md:w-1/6">
@@ -33,8 +33,8 @@ export const ProductSummary = ({ order }: Props) => {
         <button
           className="flex w-full gap-2 px-5 py-2 font-bold text-gray-200 uppercase rounded shadow-md bg-sky-700"
           onClick={() => {
-            setProductSelected(order)
-            toggleProductModal()
+            setProductSelected(order);
+            toggleProductModal();
           }}
         >
           <svg
@@ -75,5 +75,5 @@ export const ProductSummary = ({ order }: Props) => {
         </button>
       </section>
     </section>
-  )
-}
+  );
+};

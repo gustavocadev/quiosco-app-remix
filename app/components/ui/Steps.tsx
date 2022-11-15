@@ -1,41 +1,41 @@
-import { useLocation, useNavigate } from "remix"
+import { useLocation, useNavigate } from '@remix-run/react';
 
 const steps = [
   {
     step: 1,
-    title: "Elige tu producto",
-    url: "/",
-    name: "Menú",
+    title: 'Elige tu producto',
+    url: '/',
+    name: 'Menú',
   },
   {
     step: 2,
-    name: "Resumen",
-    url: "/summary",
+    name: 'Resumen',
+    url: '/summary',
   },
   {
     step: 3,
-    name: "Datos y total del pedido",
-    url: "/total",
+    name: 'Datos y total del pedido',
+    url: '/total',
   },
-]
+];
 
 const Steps = () => {
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
   const calculateProgress = () => {
-    let value = 1
+    let value = 1;
     switch (pathname) {
-      case "/":
-        value = 1
-        return value
-      case "/summary":
-        value = 50
-        return value
-      case "/total":
-        value = 100
-        return value
+      case '/':
+        value = 1;
+        return value;
+      case '/summary':
+        value = 50;
+        return value;
+      case '/total':
+        value = 100;
+        return value;
     }
-  }
+  };
 
   return (
     <>
@@ -44,14 +44,14 @@ const Steps = () => {
           return (
             <button
               onClick={() => {
-                navigate(url)
+                navigate(url);
               }}
               className="text-2xl font-bold"
               key={step}
             >
               {name}
             </button>
-          )
+          );
         })}
       </section>
 
@@ -64,7 +64,7 @@ const Steps = () => {
         ></div>
       </section>
     </>
-  )
-}
+  );
+};
 
-export { Steps }
+export { Steps };

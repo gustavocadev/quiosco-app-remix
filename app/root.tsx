@@ -1,39 +1,39 @@
 import {
   Links,
   LiveReload,
-  LoaderFunction,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from "remix"
-import type { MetaFunction, LinksFunction } from "remix"
-import styles from "./tailwind.css"
-import { Steps, Sidebar } from "~/components/ui"
-import { QuioscoProvider } from "./context/quiosco/QuioscoProvider"
-import ModalProduct from "./components/ui/ModalProduct"
-import { ToastContainer } from "react-toastify"
-import toastStyles from "react-toastify/dist/ReactToastify.min.css"
-import { db } from "~/utils/db.server"
+} from '@remix-run/react';
+
+import type { MetaFunction, LinksFunction, LoaderArgs } from '@remix-run/node';
+import styles from './tailwind.css';
+import { Steps, Sidebar } from '~/components/ui';
+import { QuioscoProvider } from './context/quiosco/QuioscoProvider';
+import ModalProduct from './components/ui/ModalProduct';
+import { ToastContainer } from 'react-toastify';
+import toastStyles from 'react-toastify/dist/ReactToastify.min.css';
+import { db } from '~/utils/db.server';
 
 export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  viewport: "width=device-width,initial-scale=1",
-})
+  charset: 'utf-8',
+  viewport: 'width=device-width,initial-scale=1',
+});
 
-export const loader: LoaderFunction = async () => {
-  const categories = await db.category.findMany()
-  return { categories }
-}
+export const loader = async (args: LoaderArgs) => {
+  const categories = await db.category.findMany();
+  return { categories };
+};
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: styles },
-  { rel: "stylesheet", href: toastStyles },
-]
+  { rel: 'stylesheet', href: styles },
+  { rel: 'stylesheet', href: toastStyles },
+];
 
 export default function App() {
-  const { categories } = useLoaderData()
+  const { categories } = useLoaderData<typeof loader>();
 
   return (
     <html lang="en">
@@ -64,5 +64,5 @@ export default function App() {
         <LiveReload />
       </body>
     </html>
-  )
+  );
 }

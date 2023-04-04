@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from '@remix-run/react';
+import { useLocation, Link } from '@remix-run/react';
 
 const steps = [
   {
@@ -19,13 +19,12 @@ const steps = [
   },
 ];
 
-const Steps = () => {
-  const navigate = useNavigate();
+export const Steps = () => {
   const { pathname } = useLocation();
   const calculateProgress = () => {
     let value = 1;
     switch (pathname) {
-      case '/':
+      case `/category/${pathname.split('/')[2]}`:
         value = 1;
         return value;
       case '/summary':
@@ -42,15 +41,9 @@ const Steps = () => {
       <section className="flex justify-between mb-5">
         {steps.map(({ step, name, url }) => {
           return (
-            <button
-              onClick={() => {
-                navigate(url);
-              }}
-              className="text-2xl font-bold"
-              key={step}
-            >
+            <Link to={url} className="text-2xl font-bold" key={step}>
               {name}
-            </button>
+            </Link>
           );
         })}
       </section>
@@ -66,5 +59,3 @@ const Steps = () => {
     </>
   );
 };
-
-export { Steps };

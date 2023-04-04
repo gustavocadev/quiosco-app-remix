@@ -1,41 +1,80 @@
-import { useContext } from 'react';
-import { QuioscoContext } from '../../context/quiosco';
+import type { Category, Order, Product } from '@prisma/client';
+import { Form, useFetcher } from '@remix-run/react';
+import { toast } from 'react-toastify';
+import { useProductStore } from '~/stores/product';
 
 type Props = {
-  order: any;
+  order: Order & {
+    products: (Product & { category: Category })[];
+  };
 };
 
 export const ProductSummary = ({ order }: Props) => {
-  const { handleDeleteProduct, toggleProductModal, setProductSelected } =
-    useContext(QuioscoContext);
+  const setIsModalOpen = useProductStore(
+    (productStore) => productStore.setIsModalOpen
+  );
+  const setProductSelected = useProductStore(
+    (productStore) => productStore.setProductSelected
+  );
+  const setIsEditing = useProductStore(
+    (productStore) => productStore.setIsEditing
+  );
+
+  const fetcher = useFetcher();
+
+  const handleUpdateProductCart = () => {
+    setIsEditing(true);
+    setProductSelected({
+      name: order.products[0].name,
+      price: order.products[0].price,
+      image: order.products[0].image,
+      quantity: order.quantity,
+      id: order.products[0].id,
+      categorySlug: order.products[0].category.slug,
+    });
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteProductCart = () => {
+    fetcher.submit(
+      {
+        _action: 'delete',
+        orderId: order.id,
+      },
+      {
+        method: 'POST',
+        action: `/category/${order.products[0].category.slug}`,
+      }
+    );
+
+    toast.success('Producto eliminado del carrito');
+  };
   return (
     <section className="flex items-center gap-10 p-3 mb-3 border shadow">
       <figure className="md:w-1/6">
         <img
           width={300}
           height={400}
-          alt={`Imagen Platillo ${order.name}`}
-          src={`/assets/img/${order.image}.jpg`}
+          // todo: fix this [0]
+          alt={`Imagen Platillo ${order.products[0].name}`}
+          src={`/assets/img/${order.products[0].image}.jpg`}
         />
       </figure>
       <section className="md:w-4/6">
-        <p className="text-3xl font-bold">{order.name}</p>
+        <p className="text-3xl font-bold">{order.products[0].name}</p>
         <p className="mt-2 text-xl font-bold">Cantidad: {order.quantity}</p>
         <p className="mt-2 text-xl font-bold text-amber-700">
-          Precio: {order.price}
+          Precio: {order.products[0].price}
         </p>
         <p className="mt-2 text-lg font-bold text-gray-800">
-          Subtotal: {order.price * order.quantity}
+          Subtotal: {order.totalPrice}
         </p>
       </section>
 
       <section className="md:w-1/6">
         <button
           className="flex w-full gap-2 px-5 py-2 font-bold text-gray-200 uppercase rounded shadow-md bg-sky-700"
-          onClick={() => {
-            setProductSelected(order);
-            toggleProductModal();
-          }}
+          onClick={handleUpdateProductCart}
         >
           <svg
             className="w-6 h-6"
@@ -53,9 +92,10 @@ export const ProductSummary = ({ order }: Props) => {
           </svg>
           Editar
         </button>
+
         <button
           className="flex w-full gap-2 px-5 py-2 mt-3 font-bold text-gray-200 uppercase bg-red-700 rounded shadow-md"
-          onClick={() => handleDeleteProduct(order.id)}
+          onClick={handleDeleteProductCart}
         >
           <svg
             className="w-6 h-6"

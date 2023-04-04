@@ -1,33 +1,18 @@
-import { useNavigate, useParams } from '@remix-run/react';
-import { useContext } from 'react';
-import { QuioscoContext } from '~/context/quiosco';
-type Props = {
-  name: string;
-  icon: string;
-  id: number;
-};
+import type { Category as ICategory } from '@prisma/client';
+import { Link, useLocation } from '@remix-run/react';
 
-function Category({ name, icon, id }: Props) {
-  const navigate = useNavigate();
-  const { pathname } = useParams();
-  const { categorySelected, setCategorySelected } = useContext(QuioscoContext);
+type Props = ICategory;
+
+function Category({ name, icon, id, slug }: Props) {
+  // const { categorySelected, setCategorySelected } = useContext(QuioscoContext);
+  const location = useLocation();
 
   return (
-    <button
+    <Link
       className={`
-       ${categorySelected?.id === id && 'bg-amber-400'}
+       ${location.pathname === `/category/${slug}` && 'bg-amber-400'}
        flex items-center gap-4 w-full border p-5 hover:bg-amber-400 hover:cursor-pointer`}
-      onClick={() => {
-        if (pathname !== '/') {
-          navigate('/');
-        }
-        setCategorySelected({
-          id,
-          name,
-          icon,
-        });
-        // getCategoryById(id)
-      }}
+      to={`/category/${slug}`}
     >
       <figure>
         <img
@@ -38,7 +23,7 @@ function Category({ name, icon, id }: Props) {
         />
       </figure>
       <h2 className="text-2xl font-bold ">{name}</h2>
-    </button>
+    </Link>
   );
 }
 

@@ -1,35 +1,81 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model Product {
-  id         Int      @id @default(autoincrement())
+  id         String   @id @unique @default(uuid())
   name       String
   price      Float
-  image      String?
+  image      String
+  stock      Int
+  color      String?
+  // many to one
   category   Category @relation(fields: [categoryId], references: [id])
   categoryId Int
+
+  // many to one - Many Products have one Order
+  order   Order?  @relation(fields: [orderId], references: [id])
+  orderId String?
 }
 
 model Category {
-  id       Int       @id @default(autoincrement())
-  name     String
-  icon     String
+  id   Int    @id @unique
+  name String
+  icon String
+  slug String
+
+  // one to many
   products Product[]
 }
 
 model Order {
-  id    Int    @id @default(autoincrement())
-  name  String
-  date  String
-  total Float
-  order Json
+  id          String  @id @unique @default(uuid())
+  totalPrice  Float
+  quantity    Int
+  isConfirmed Boolean @default(false)
+
+  // many to one - Many Orders have one Customer
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String
+
+  // many to one - Many Orders have one Cart
+  cart   Cart   @relation(fields: [cartId], references: [id])
+  cartId String
+
+  // one to many - One Order has many Products
+  products Product[]
+}
+
+// Resumen - ShoppingCart
+model Cart {
+  id String @id @unique @default(uuid())
+
+  // one to one - One Cart has one Customer
+  customer   Customer @relation(fields: [customerId], references: [id])
+  customerId String   @unique
+
+  // one to many - One Cart has many orders
+  orders Order[]
+}
+
+model Customer {
+  id       String  @id @unique @default(uuid())
+  name     String
+  lastName String
+  address  String?
+  username String?
+  phone    String?
+  email    String
+  password String
+
+  // one to many - One Customer has many Orders
+  orders Order[]
+
+  // one to one - One Customer has one Cart
+  cart Cart?
 }

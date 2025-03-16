@@ -1,13 +1,17 @@
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from 'react-router';
+import { useLoaderData } from 'react-router';
 import { Product } from '~/components/quiosco';
 import { prisma } from '~/utils/db.server';
 import { parseForm, parseParams } from 'zodix';
 import { z } from 'zod';
 import { getUser } from '~/session.server';
-import { redirect } from '@remix-run/node';
+import { redirect } from 'react-router';
 
-export async function loader({ params }: LoaderArgs) {
+export async function loader({ params }: LoaderFunctionArgs) {
   const { categoryName } = parseParams(params, {
     categoryName: z.string(),
   });
@@ -24,7 +28,7 @@ export async function loader({ params }: LoaderArgs) {
   return categoryFound;
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await parseForm(request, {
     _action: z.string(),
     productId: z.string().optional(),
@@ -115,7 +119,7 @@ export async function action({ request }: ActionArgs) {
   return {};
 }
 
-export const meta: V2_MetaFunction = () => {
+export const meta: MetaFunction = () => {
   return [
     {
       title: 'Quiosco Menu',

@@ -1,6 +1,6 @@
 import type { Category, Customer } from '@prisma/client';
 import { Category as CategoryComponent } from '~/components/quiosco/Category';
-import { Link, useLocation } from '@remix-run/react';
+import { Link, useLocation } from 'react-router';
 
 type Props = {
   categories: Category[];

@@ -1,17 +1,20 @@
-import type { LoaderArgs, V2_MetaFunction } from '@remix-run/node';
-import { useLoaderData } from '@remix-run/react';
+import {
+  type LoaderFunctionArgs,
+  type MetaFunction,
+  useLoaderData,
+} from 'react-router';
 import { ProductSummary } from '~/components/quiosco/ProductSummary';
 import { getUser } from '~/session.server';
 import { prisma } from '~/utils/db.server';
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: 'Resumen de pedido',
     description: 'Aquí puedes ver el resumen de tu pedido',
   },
 ];
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   const user = await getUser(request);
   if (!user) return null;
 

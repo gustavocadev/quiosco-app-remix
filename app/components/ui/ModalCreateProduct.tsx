@@ -1,8 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { useProductStore } from '../../stores/product';
-import { useLocation } from '@remix-run/react';
+import { useLocation } from 'react-router';
 import { toast } from 'react-toastify';
 
 type Props = {};

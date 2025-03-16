@@ -1,6 +1,10 @@
-import { Form, useLoaderData, useNavigation } from '@remix-run/react';
-import { redirect } from '@remix-run/node';
-import type { ActionArgs, V2_MetaFunction, LoaderArgs } from '@remix-run/node';
+import { Form, useLoaderData, useNavigation } from 'react-router';
+import { redirect } from 'react-router';
+import type {
+  ActionFunctionArgs,
+  LoaderFunctionArgs,
+  MetaFunction,
+} from 'react-router';
 import { getUser } from '~/session.server';
 import { toast } from 'react-toastify';
 import { prisma } from '~/utils/db.server';
@@ -8,14 +12,14 @@ import { parseForm } from 'zodix';
 import { z } from 'zod';
 import { useEffect } from 'react';
 
-export const meta: V2_MetaFunction = () => [
+export const meta: MetaFunction = () => [
   {
     title: 'Total',
     description: 'Esta seccion es sobre el total del pedido',
   },
 ];
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const user = await getUser(request);
   if (!user) return redirect('/login');
 
@@ -36,7 +40,7 @@ export async function loader({ request }: LoaderArgs) {
   };
 }
 
-export const action = async ({ request }: ActionArgs) => {
+export const action = async ({ request }: ActionFunctionArgs) => {
   const user = await getUser(request);
   if (!user) return redirect('/login');
 
@@ -69,7 +73,7 @@ export default function TotalPage() {
   const navigation = useNavigation();
   const isSubmitting =
     navigation.state === 'submitting' &&
-    navigation.formData.get('_action') === 'update';
+    navigation.formData?.get('_action') === 'update';
 
   useEffect(() => {
     if (isSubmitting) {

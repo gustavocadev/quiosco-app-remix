@@ -1,7 +1,7 @@
 import type { Customer } from '@prisma/client';
-import { createCookieSessionStorage, redirect } from '@remix-run/node';
+import { createCookieSessionStorage, redirect } from 'react-router';
 import { prisma } from '~/utils/db.server';
-import { nanoid } from 'napi-nanoid';
+import { nanoid } from 'nanoid';
 
 export const { getSession, commitSession, destroySession } =
   createCookieSessionStorage({

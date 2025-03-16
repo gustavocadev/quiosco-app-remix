@@ -1,4 +1,4 @@
-import { useLocation, Link } from '@remix-run/react';
+import { useLocation, Link } from 'react-router';
 
 const steps = [
   {
@@ -48,7 +48,7 @@ export const Steps = () => {
         })}
       </section>
 
-      <section className="bg-gray-100 mb-100">
+      <section className="bg-gray-100 mb-10">
         <div
           className={`rounded-full bg-amber-500 text-xs leading-none h-2 text-center text-white ]`}
           style={{

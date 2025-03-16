@@ -1,11 +1,11 @@
-import { type LoaderArgs, redirect, json } from '@remix-run/node';
-import { Outlet, useLoaderData } from '@remix-run/react';
+import { type LoaderFunctionArgs, redirect } from 'react-router';
+import { Outlet, useLoaderData } from 'react-router';
 import { Sidebar, Steps } from '~/components/ui';
 import ModalCreateProduct from '~/components/ui/ModalCreateProduct';
 import { getUser, isUserAuthenticated } from '~/session.server';
 import { prisma } from '~/utils/db.server';
 
-export const loader = async ({ request }: LoaderArgs) => {
+export const loader = async ({ request }: LoaderFunctionArgs) => {
   // if the user is not authenticated, redirect to login
   const isAuthenticated = await isUserAuthenticated(request);
   if (!isAuthenticated) return redirect('/login');
@@ -14,10 +14,10 @@ export const loader = async ({ request }: LoaderArgs) => {
   const categories = await prisma.category.findMany();
   const user = await getUser(request);
 
-  return json({
+  return {
     categories,
     user,
-  });
+  };
 };
 
 export default function () {

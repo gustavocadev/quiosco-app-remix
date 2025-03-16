@@ -1,30 +1,33 @@
-import { type LoaderArgs, redirect, json } from '@remix-run/node';
-import { Form, useLoaderData, useNavigation } from '@remix-run/react';
+import {
+  type ActionFunctionArgs,
+  type LoaderFunctionArgs,
+  redirect,
+} from 'react-router';
+import { Form, useLoaderData, useNavigation } from 'react-router';
 import { z } from 'zod';
 import { parseForm, parseParams } from 'zodix';
-import type { ActionArgs } from '@remix-run/node';
 import { getUser, isUserAuthenticated, logout } from '~/session.server';
 import { prisma } from '~/utils/db.server';
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
 
-export async function loader({ request, params }: LoaderArgs) {
+export async function loader({ request, params }: LoaderFunctionArgs) {
   const isAuthenticated = await isUserAuthenticated(request);
   if (!isAuthenticated) return redirect('/login');
 
   const { username } = parseParams(params, {
-    username: z.string().nonempty(),
+    username: z.string().min(1),
   });
 
   const user = await getUser(request);
 
-  return json({
+  return {
     username,
     user,
-  });
+  };
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const user = await getUser(request);
   if (!user) return redirect('/login');
   const formData = await parseForm(request, {
@@ -69,7 +72,7 @@ export default function () {
   const navigation = useNavigation();
   const isSubmitting =
     navigation.state === 'submitting' &&
-    navigation.formData.get('_action') === 'update';
+    navigation.formData?.get('_action') === 'update';
 
   useEffect(() => {
     if (isSubmitting) {

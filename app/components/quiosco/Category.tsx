@@ -1,5 +1,5 @@
 import type { Category as ICategory } from '@prisma/client';
-import { Link, useLocation } from '@remix-run/react';
+import { Link, useLocation } from 'react-router';
 
 type Props = ICategory;
 

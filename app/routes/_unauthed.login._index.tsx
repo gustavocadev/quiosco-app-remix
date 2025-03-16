@@ -1,5 +1,5 @@
-import { Form, Link } from '@remix-run/react';
-import { type ActionArgs, redirect } from '@remix-run/node';
+import { Form, Link } from 'react-router';
+import { redirect } from 'react-router';
 import { parseForm } from 'zodix';
 import { z } from 'zod';
 import {
@@ -7,16 +7,16 @@ import {
   isUserAuthenticated,
   login,
 } from '~/session.server';
-import type { LoaderArgs } from '@remix-run/node';
+import type { ActionFunctionArgs, LoaderFunctionArgs } from 'react-router';
 
-export async function loader({ request }: LoaderArgs) {
+export async function loader({ request }: LoaderFunctionArgs) {
   const isAuthenticated = await isUserAuthenticated(request);
   if (isAuthenticated) return redirect('/');
 
   return {};
 }
 
-export async function action({ request }: ActionArgs) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await parseForm(request, {
     email: z.string().email(),
     password: z.string().min(5),
